@@ -1,6 +1,6 @@
-import getStore from '../store';
+import { store } from '../store';
 
-const store = getStore();
+// const store = getStore();
 
 export const ifNotAuth = (to, from, next) => {
   console.log('asdasd: ', store.getters);

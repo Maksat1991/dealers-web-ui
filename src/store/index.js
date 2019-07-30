@@ -10,8 +10,11 @@ Vue.use(Vuex);
  * directly export the Store instantiation
  */
 
+// eslint-disable-next-line import/no-mutable-exports
+let store = null;
+
 export default function (/* { ssrContext } */) {
-  const Store = new Vuex.Store({
+  store = new Vuex.Store({
     modules: {
       auth,
     },
@@ -21,5 +24,7 @@ export default function (/* { ssrContext } */) {
     strict: process.env.DEV,
   });
 
-  return Store;
+  return store;
 }
+
+export { store };
