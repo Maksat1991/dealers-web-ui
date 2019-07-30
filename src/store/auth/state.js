@@ -1,6 +1,7 @@
 export default {
   auth: {
-    loggedIn: false,
+    status: '',
+    token: localStorage.getItem('token') || '',
   },
   user: {},
 };

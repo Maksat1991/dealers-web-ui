@@ -1,10 +1,12 @@
-export function SET_AUTH(state, payload) {
-  state.auth = {
-    ...payload,
-    loggedIn: true,
-  };
-}
+export const AUTH_REQUEST = (state) => {
+  state.auth.status = 'loading';
+};
 
-export function SET_USER(state, payload) {
-  state.user = payload;
-}
+export const AUTH_SUCCESS = (state, token) => {
+  state.auth.status = 'success';
+  state.auth.token = token;
+};
+
+export const AUTH_ERROR = (state) => {
+  state.auth.status = 'error';
+};

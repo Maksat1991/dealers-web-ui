@@ -69,8 +69,10 @@ export default {
       formData.append('grant_type', 'password');
       formData.append('username', this.login);
       formData.append('password', this.password);
-      console.log(this.$store);
-      this.$store.dispatch('auth/AUTH', formData);
+      this.$store.dispatch('auth/AUTH_REQUEST', formData)
+        .then(() => {
+          this.$router.push('/cabinet');
+        });
     },
   },
 };

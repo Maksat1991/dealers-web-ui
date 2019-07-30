@@ -1,3 +1,3 @@
-export function LOGGED_IN(state) {
-  return state.auth.loggedIn;
-}
+export const authStatus = state => state.status;
+
+export const isAuth = state => !!state.token;
