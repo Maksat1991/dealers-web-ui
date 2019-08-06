@@ -38,7 +38,7 @@ export default {
 
   data() {
     return {
-      left: true,
+      left: false,
     };
   },
 };
