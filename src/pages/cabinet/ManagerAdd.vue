@@ -20,7 +20,6 @@
         :label="$t('label.phone')"
       ></q-input>
       <q-btn
-        :label="$t('button.submit')"
         type="submit"
       ></q-btn>
     </q-form>
@@ -28,16 +27,10 @@
 </template>
 
 <script>
-import {
-  QForm,
-  QInput,
-  QBtn,
-} from 'quasar';
 import api from 'src/helpers/api';
 
 export default {
   name: 'ManagerAdd',
-  components: { QForm, QInput, QBtn },
   data: () => ({
     fields: {
       email: '',

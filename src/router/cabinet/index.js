@@ -6,7 +6,12 @@ export default {
   children: [
     {
       path: '',
-      component: () => import('../../pages/Dashboard.vue'),
+      component: () => import('../../pages/cabinet/Dashboard.vue'),
+      beforeEnter: ifAuth,
+    },
+    {
+      path: 'manager-add',
+      component: () => import('../../pages/cabinet/ManagerAdd.vue'),
       beforeEnter: ifAuth,
     },
   ],

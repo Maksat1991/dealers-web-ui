@@ -15,7 +15,7 @@ export default {
       console.log('err::: ', err.config);
       if (err.response && err.response.status === 401) {
         this.$store.dispatch('auth/AUTH_LOGOUT');
-        this.$route.push('/login');
+        this.$router.push('/login');
       }
       throw err;
     }));
