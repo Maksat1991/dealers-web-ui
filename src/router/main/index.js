@@ -6,7 +6,11 @@ export default {
   children: [
     {
       path: '',
+<<<<<<< HEAD
       component: () => import('../../pages/Welcome.vue'),
+=======
+      component: () => import('../../pages/Index.vue'),
+>>>>>>> Created catalog import page
     },
     {
       path: 'login',

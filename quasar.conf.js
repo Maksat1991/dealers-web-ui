@@ -1,5 +1,9 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
+const webpack = require('webpack');
+const path = require('path');
+
+const envparsers = require('./config/envparser');
 
 module.exports = function (ctx) {
   return {
@@ -7,9 +11,7 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     boot: [
       'auth',
-      'i18n',
       'axios',
-      'api',
       'valid',
     ],
 
@@ -53,6 +55,13 @@ module.exports = function (ctx) {
         'QItemSection',
         'QItemLabel',
         'QScrollArea',
+        'QFile',
+        'QForm',
+        'QInput',
+        'QMarkupTable',
+        'QSelect',
+        'QCard',
+        'QCardSection',
       ],
 
       directives: [
@@ -74,6 +83,11 @@ module.exports = function (ctx) {
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
+      env: ctx.dev ? envparsers() : {
+        // get values from .env while dev and from heroku while prod
+        AUTH_TOKEN: JSON.stringify(process.env.AUTH_TOKEN),
+        PORT: JSON.stringify(process.env.PORT),
+      },
       extendWebpack(cfg) {
         cfg.module.rules.push({
           enforce: 'pre',
@@ -84,12 +98,24 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish'),
           },
         });
+        // if mode is development, push keys from file
+        if (ctx.dev) {
+          // Create an alias for our helper
+          cfg.resolve.alias.env = path.resolve(__dirname, 'config/helpers/env.js');
+
+          // Make our helper function Global
+          cfg.plugins.push(
+            new webpack.ProvidePlugin({
+              env: 'env', // this variable is our alias, it's not a string
+            }),
+          );
+        }
       },
     },
 
     devServer: {
       // https: true,
-      // port: 8080,
+      port: 8080,
       open: 'chromium', // opens browser window automatically
     },
 
