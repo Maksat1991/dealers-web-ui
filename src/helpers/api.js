@@ -1,9 +1,5 @@
 import axios from 'axios';
 import { Notify } from 'quasar';
-<<<<<<< HEAD
-import { i18n } from '../boot/i18n';
-=======
->>>>>>> Created catalog import page
 
 async function api(
   url = '',
@@ -29,11 +25,7 @@ async function api(
       [requestBodyName]: body,
     });
     Notify.create({
-<<<<<<< HEAD
-      message: i18n.t('notification.loggedIn'),
-=======
       message: 'Вы успешно авторизовались',
->>>>>>> Created catalog import page
       color: 'green',
       position: 'top-right',
     });
@@ -42,11 +34,7 @@ async function api(
     if (err && err.response) {
       console.warn(err.response);
       Notify.create({
-<<<<<<< HEAD
-        message: (err.response.data && err.response.data.error_description) || i18n.t('notification.error'),
-=======
         message: (err.response.data && err.response.data.error_description) || 'Произошла ошибка, попробуйте ещё раз',
->>>>>>> Created catalog import page
         color: 'red',
         position: 'top-right',
       });

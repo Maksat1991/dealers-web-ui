@@ -5,24 +5,6 @@
     >
       <q-input
         v-model="fields.email"
-<<<<<<< HEAD
-        :label="$t('label.email')"
-      ></q-input>
-      <q-input
-        v-model="fields.name"
-        :label="$t('label.name')"
-      ></q-input>
-      <q-input
-        v-model="fields.password"
-        :label="$t('label.password')"
-      ></q-input>
-      <q-input
-        v-model="fields.phone"
-        :label="$t('label.phone')"
-      ></q-input>
-      <q-btn
-        :label="$t('button.submit')"
-=======
         label="E-mail"
       ></q-input>
       <q-input
@@ -40,7 +22,6 @@
       <q-btn
         class="q-my-lg"
         label="Отправить"
->>>>>>> Created catalog import page
         type="submit"
       ></q-btn>
     </q-form>
@@ -48,22 +29,10 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import {
-  QForm,
-  QInput,
-  QBtn,
-} from 'quasar';
-=======
->>>>>>> Created catalog import page
 import api from 'src/helpers/api';
 
 export default {
   name: 'ManagerAdd',
-<<<<<<< HEAD
-  components: { QForm, QInput, QBtn },
-=======
->>>>>>> Created catalog import page
   data: () => ({
     fields: {
       email: '',

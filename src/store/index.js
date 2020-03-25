@@ -2,11 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import auth from './auth';
-<<<<<<< HEAD
-=======
 import table from './table';
 import catalogs from './catalogs';
->>>>>>> Created catalog import page
 
 Vue.use(Vuex);
 
@@ -22,11 +19,8 @@ export default function (/* { ssrContext } */) {
   store = new Vuex.Store({
     modules: {
       auth,
-<<<<<<< HEAD
-=======
       table,
       catalogs,
->>>>>>> Created catalog import page
     },
 
     // enable strict mode (adds overhead!)

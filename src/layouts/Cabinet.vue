@@ -4,28 +4,12 @@
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left" />
-<<<<<<< HEAD
-
-        <q-toolbar-title>
-          Title
-        </q-toolbar-title>
-
-        <q-btn
-          flat
-          :label="$t('button.logout')"
-          @click="logout"
-        ></q-btn>
-      </q-toolbar>
-
-
-=======
         <q-btn
           flat
           label="Выйти"
           @click="logout"
         ></q-btn>
       </q-toolbar>
->>>>>>> Created catalog import page
     </q-header>
 
     <q-drawer v-model="left" side="left" bordered>
@@ -35,18 +19,6 @@
         class="rounded-borders text-primary"
       >
         <q-item
-<<<<<<< HEAD
-          clickable
-          v-ripple
-          to="/manager-add"
-          :active="$route.path === '/cabinet/manager-add'"
-          active-class="my-menu-link"
-        >
-          <q-item-section avatar>
-            <q-icon name="inbox" />
-          </q-item-section>
-          <q-item-section>Inbox</q-item-section>
-=======
           v-for="(link, index) of links"
           :key="index"
           clickable
@@ -59,7 +31,6 @@
             <q-icon :name="link.icon" />
           </q-item-section>
           <q-item-section>{{ link.text }}</q-item-section>
->>>>>>> Created catalog import page
         </q-item>
       </q-list>
     </q-drawer>
@@ -68,17 +39,6 @@
       <router-view />
     </q-page-container>
 
-<<<<<<< HEAD
-    <q-footer elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          Title
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-
-=======
->>>>>>> Created catalog import page
   </q-layout>
 </template>
 
@@ -88,8 +48,6 @@ export default {
   data() {
     return {
       left: false,
-<<<<<<< HEAD
-=======
       links: [
         {
           to: '/register',
@@ -107,7 +65,6 @@ export default {
           icon: 'publish',
         },
       ],
->>>>>>> Created catalog import page
     };
   },
   methods: {
@@ -116,11 +73,5 @@ export default {
       this.$router.push('/login');
     },
   },
-<<<<<<< HEAD
-  created() {
-    console.log(this.$route);
-  },
-=======
->>>>>>> Created catalog import page
 };
 </script>
