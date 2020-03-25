@@ -1,11 +1,13 @@
 <template>
   <q-markup-table class="Table">
-    <table-row
-      class="Table-Row"
-      v-for="row of data"
-      :key="row.number"
-      :row="row">
-    </table-row>
+    <div class="Table-Wrapper">
+      <table-row
+        class="Table-Row"
+        v-for="row of data"
+        :row="row.cells"
+        :key="row.number"
+      />
+    </div>
   </q-markup-table>
 </template>
 
@@ -23,15 +25,26 @@ export default {
       required: true,
     },
   },
+  mounted() {
+    this.$el.scrollTop = this.$el.getBoundingClientRect().height;
+  },
 };
 </script>
 
 <style>
 .Table {
+  display: flex;
+  align-items: center;
   counter-reset: rowNumber columnNumber;
-  padding-left: 2em;
-  padding-top: 3em;
+  padding-bottom: 3em;
   border: 1px solid;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  transform: rotateX(180deg);
+}
+
+.Table-Wrapper {
+  transform: rotateX(180deg);
 }
 
 .Table-Row {
@@ -63,10 +76,10 @@ export default {
   position: relative;
 }
 
-.Table-Cell:first-child::before {
+.Table-Cell::before {
   content: counter(rowNumber);
   position: absolute;
-  left: -15%;
+  left: -20px;
   top: 0;
   bottom: 0;
   width: 1em;
@@ -74,5 +87,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.Table-Cell ~ .Table-Cell::before {
+  content: none;
 }
 </style>

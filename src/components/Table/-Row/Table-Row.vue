@@ -1,6 +1,15 @@
 <template>
   <tr>
-    <table-cell v-for="cell of row.cells" :key="cell.number" :cell="cell"></table-cell>
+    <table-cell>
+      <q-btn flat class="q-mr-lg" size="small" @click="removeRow($vnode.key)">
+        <q-icon name="highlight_off" />
+      </q-btn>
+    </table-cell>
+    <table-cell
+      v-for="cell of row"
+      :key="cell.number"
+      :cell="cell.value"
+    />
   </tr>
 </template>
 
@@ -8,14 +17,19 @@
 import TableCell from '../-Cell/Table-Cell';
 
 export default {
-  name: 'Table-Row.vue',
+  name: 'Table-Row',
   components: {
     TableCell,
   },
   props: {
     row: {
-      type: Object,
+      type: Array,
       required: true,
+    },
+  },
+  methods: {
+    removeRow(rowIndex) {
+      this.$store.commit('table/removeRow', rowIndex);
     },
   },
 };

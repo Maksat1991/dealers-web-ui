@@ -20,29 +20,14 @@
           v-model.number="input.value"
           :rules="[num => 1 <= num  && num <= input.max || 'Вне значений таблицы']"
         />
-        <div class="row full-width flex justify-around q-my-lg">
-          <q-select
-            class="q-mx-md"
-            v-for="(select, index) of selects"
-            :key="index"
-            style="width: 30%"
-            :label="select.label"
-            :options="['PIECE', 'KG', 'LITER']"
-            v-model="select.value"
-            :rules="[select.required ?
-              val => !!val || 'Необходимо выбрать единицу измерения' :
-              () => true
-            ]"
-          />
-          <q-select
-            class="q-mx-md"
-            v-model="catalogId"
-            label="ID Каталога"
-            :options="catalogIdRange"
-            style="width: 30%"
-            :rules="[val => val || 'Необходимо выбрать каталог']"
-          />
-        </div>
+        <q-select
+          class="q-mx-md"
+          v-model="catalogId"
+          label="ID Каталога"
+          :options="catalogIdRange"
+          style="width: 30%"
+          :rules="[val => val || 'Необходимо выбрать каталог']"
+        />
         <q-btn
           class="row q-my-lg"
           type="submit"
@@ -91,23 +76,6 @@ export default {
           value: null,
           max: 'columns.length',
         },
-        productsRow: {
-          hint: 'Начало товаров',
-          value: null,
-          max: 'rows.length',
-        },
-      },
-      selects: {
-        measure: {
-          value: null,
-          label: 'Единица измерения',
-          required: true,
-        },
-        orderMeasure: {
-          value: null,
-          label: 'Единица измерения товара',
-          required: false,
-        },
       },
     };
   },
@@ -117,7 +85,6 @@ export default {
   computed: {
     ...mapGetters('table', ['getTable']),
     ...mapGetters('catalogs', ['getCatalogs']),
-    ...mapGetters('auth', ['isAuth']),
     catalogIdRange() {
       const range = [];
       for (let i = 0; i < this.getCatalogs.length; i += 1) range.push(i + 1);
@@ -133,18 +100,11 @@ export default {
     },
   },
   methods: {
-    getColumnId(index) {
-      return this.getTable[0].cells[index - 1].number;
-    },
-    getRowId(index) {
-      return this.getTable[index - 1].number;
-    },
     updateTable(table) {
       this.$store.commit('table/updateTable', table);
       Object.values(this.inputs).forEach((input) => {
         // set restriction for user so he can't put value more than it is possible
         if (input.max === 'columns.length') input.max = table[0].cells.length;
-        else input.max = table.length;
       });
     },
     async sendFile() {
@@ -180,28 +140,43 @@ export default {
       const token = localStorage.getItem('token');
       const headers = new Headers();
       headers.append('Authorization', `Bearer ${token}`);
-      headers.append('Content-Type', 'application/x-www-form-urlencoded');
+      headers.append('Content-Type', 'application/json');
 
-      const request = {
+      const vendorCodeColumn = this.inputs.vendorCodeColumn.value;
+      const nameColumn = this.inputs.nameColumn.value;
+      const countColumn = this.inputs.countColumn.value;
+      const priceColumn = this.inputs.priceColumn.value;
+
+      const table = JSON.parse(JSON.stringify(this.getTable));
+      // filter array
+      table.forEach((row, index, array) => {
+        row.cells = row.cells.filter((cell) => {
+          if ([
+            vendorCodeColumn,
+            nameColumn,
+            countColumn,
+            priceColumn,
+          ].includes(cell.number)) {
+            array[index] = {
+              articul: row.cells[vendorCodeColumn - 1].value,
+              count: row.cells[countColumn - 1].value,
+              name: row.cells[nameColumn - 1].value,
+              price: row.cells[priceColumn - 1].value,
+            };
+            return true;
+          } return false;
+        });
+      });
+      const body = {
         catalog_id: this.catalogId,
-        measure: this.selects.measure.value,
-        order_measure: this.selects.orderMeasure.value,
-        column_articul: this.getColumnId(this.inputs.vendorCodeColumn.value),
-        column_name: this.getColumnId(this.inputs.nameColumn.value),
-        column_count: this.getColumnId(this.inputs.countColumn.value),
-        column_price: this.getColumnId(this.inputs.priceColumn.value),
-        first_row_number: this.getRowId(this.inputs.productsRow.value),
+        items: table,
       };
-      const body = new FormData();
-      body.append('file', this.file.copy, this.file.copy.name);
-      body.append('request', JSON.stringify(request));
       const res = await fetch('http://185.146.3.147:8082/api/catalog/import', {
         method: 'POST',
         headers,
-        body,
+        body: JSON.stringify(body),
         redirect: 'follow',
       });
-
       if (res.ok) {
         this.updateTable([]);
         Notify.create({
@@ -213,14 +188,15 @@ export default {
           input.value = null;
         });
         this.file.copy = null;
+        this.sendingResult = false;
       } else {
         Notify.create({
-          message: 'Произошла ошибка при импортровании',
+          message: 'Произошла ошибка при импортровании, попробуйте изменить данные в таблице',
           color: 'red',
           position: 'top-right',
         });
+        this.sendingResult = false;
       }
-      this.sendingResult = false;
     },
   },
   async mounted() {
