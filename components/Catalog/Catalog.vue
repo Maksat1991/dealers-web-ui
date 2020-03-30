@@ -7,7 +7,7 @@
       {{ catalog.name }}
     </v-list-item-content>
     <v-list-item-action>
-      <v-btn @click="updateSelectedCatalog(catalog.id)">
+      <v-btn @click="updateSelectedCatalog(catalog)">
         Импортировать в каталог
       </v-btn>
     </v-list-item-action>
@@ -24,9 +24,9 @@ export default {
     }
   },
   methods: {
-    updateSelectedCatalog(id) {
+    updateSelectedCatalog(catalog) {
       this.$router.push({ name: 'user-catalogs-import' })
-      this.$store.commit('catalogs/updateSelectedCatalog', id)
+      this.$store.commit('catalogs/updateSelectedCatalog', catalog)
     }
   }
 }

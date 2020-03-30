@@ -31,10 +31,10 @@
           ]"
         />
         <v-select
-          v-model="catalogId"
+          v-model="selectedCatalogName"
           class="mx-5"
           label="Каталог"
-          :items="catalogIdRange"
+          :items="catalogNames"
           :rules="[$validate.required]"
         />
         <v-btn
@@ -120,18 +120,26 @@ export default {
     },
     ...mapGetters('table', ['getTable']),
     ...mapGetters('catalogs', ['getCatalogs']),
-    catalogIdRange() {
+    catalogNames() {
       const range = []
       for (let i = 0; i < this.getCatalogs.length; i += 1)
         range.push(this.getCatalogs[i].name)
       return range
     },
-    catalogId: {
+    selectedCatalog: {
       get() {
         return this.$store.getters['catalogs/getSelectedCatalog']
       },
-      set(catalogId) {
-        this.$store.commit('catalogs/updateSelectedCatalog', catalogId)
+      set(selectedCatalog) {
+        this.$store.commit('catalogs/updateSelectedCatalog', selectedCatalog)
+      }
+    },
+    selectedCatalogName: {
+      get() {
+        return this.selectedCatalog.name
+      },
+      set(selectedCatalogName) {
+        this.selectedCatalog = this.selectedCatalog.name = selectedCatalogName
       }
     }
   },
@@ -233,7 +241,7 @@ export default {
         rowArray[rowIndex] = newRow
       })
       const body = {
-        catalog_id: this.catalogId,
+        catalog_id: this.selectedCatalog.id,
         items: table
       }
       const res = await fetch('http://185.146.3.147:8082/api/catalog/import', {

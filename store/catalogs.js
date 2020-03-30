@@ -8,13 +8,13 @@ export const getters = {
     return state.catalogs
   },
   getSelectedCatalog(state) {
-    return state.selectedCatalog
+    return state.selectedCatalog || state.catalogs[0]
   }
 }
 
 export const mutations = {
-  updateSelectedCatalog(state, id) {
-    state.selectedCatalog = id
+  updateSelectedCatalog(state, catalog) {
+    state.selectedCatalog = catalog
   },
   updateCatalogs(state, catalogs) {
     state.catalogs = catalogs
