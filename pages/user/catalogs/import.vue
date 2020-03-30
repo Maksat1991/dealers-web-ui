@@ -139,7 +139,10 @@ export default {
         return this.selectedCatalog.name
       },
       set(selectedCatalogName) {
-        this.selectedCatalog = this.selectedCatalog.name = selectedCatalogName
+        const selectedCatalog = JSON.parse(
+          JSON.stringify(this.selectedCatalog.name)
+        )
+        this.selectedCatalog = selectedCatalog.selectedCatalogName
       }
     }
   },
