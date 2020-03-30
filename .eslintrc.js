@@ -1,49 +1,24 @@
 module.exports = {
   root: true,
-
-  parserOptions: {
-    parser: 'babel-eslint',
-    sourceType: 'module'
-  },
-
   env: {
-    browser: true
+    browser: true,
+    node: true
   },
-
-  // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-  // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
   extends: [
-    'plugin:vue/essential',
-    'airbnb-base'
+    '@nuxtjs',
+    'prettier',
+    'prettier/vue',
+    'plugin:prettier/recommended',
+    'plugin:nuxt/recommended'
   ],
-
-  // required to lint *.vue files
   plugins: [
-    'vue'
+    'prettier'
   ],
-
-  globals: {
-    'ga': true, // Google Analytics
-    'cordova': true,
-    '__statics': true,
-    'process': true
-  },
-
   // add your custom rules here
   rules: {
-    'no-param-reassign': 'off',
-
-    'import/first': 'off',
-    'import/named': 'error',
-    'import/namespace': 'error',
-    'import/default': 'error',
-    'import/export': 'error',
-    'import/extensions': 'off',
-    'import/no-unresolved': 'off',
-    'import/no-extraneous-dependencies': 'off',
-    'import/prefer-default-export': 'off',
-    'prefer-promise-reject-errors': 'off',
-    'no-console': 'off',
-    'no-debugger': 'off'
+    'no-console': 'off'
   }
-};
+}
