@@ -13,5 +13,9 @@ Vue.prototype.$validate = {
       'Некорректный номер телефона'
     )
   },
-  min: (min) => (value) => value.length >= min || `Не менее ${min} знаков`
+  min: (min) => (value) => value.length >= min || `Не менее ${min} символов`,
+  name: (name) => {
+    const pattern = /^[A-zА-яЁё]+$/i
+    return pattern.test(name) || 'Имя может содержать только буквы'
+  }
 }

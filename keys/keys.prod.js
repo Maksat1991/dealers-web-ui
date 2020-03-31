@@ -1,3 +1,3 @@
 module.exports = {
-  AUTH_TOKEN: 'ZnJvbnRlbmQ6c2VjcmV0'
+  AUTH_TOKEN: process.env.AUTH_TOKEN
 }

@@ -7,7 +7,13 @@
         v-model="input.value"
         :label="input.label"
         :rules="input.rules"
-        :type="input.type"
+        :type="
+          input.type !== 'password'
+            ? input.type
+            : showPassword
+            ? 'text'
+            : 'password'
+        "
         :append-icon="
           input.label === 'Пароль'
             ? showPassword
@@ -18,19 +24,21 @@
         :counter="input.label === 'Пароль' ? 'counter' : undefined"
         @click:append="showPassword = !showPassword"
       />
-      <div>
+      <div class="d-flex flex-column">
         <v-btn
-          :loading="redirecting"
-          to="/login"
+          type="submit"
+          :disabled="!valid"
           color="primary"
-          class="q-mr-sm"
-          @click="redirecting = true"
+          :loading="registering"
         >
-          Вход
-        </v-btn>
-        <v-btn type="submit" :disabled="!valid" color="primary">
           Регистрация
         </v-btn>
+        <span class="text-center Register-Link d-flex flex-column mt-3">
+          Уже есть аккаунт?
+          <nuxt-link to="/login" color="primary">
+            Вход
+          </nuxt-link>
+        </span>
       </div>
     </v-form>
     <alert :alert="alert" />
@@ -59,7 +67,7 @@ export default {
       password: {
         value: '',
         label: 'Пароль',
-        type: '',
+        type: 'password',
         rules: []
       },
       phone: {
@@ -71,12 +79,17 @@ export default {
     },
     alert: { result: '', text: '' },
     showPassword: false,
-    redirecting: false,
-    valid: false
+    valid: false,
+    registering: false
   }),
+  // set up rules for inputs
   mounted() {
     this.inputs.email.rules = [this.$validate.required, this.$validate.email]
-    this.inputs.name.rules = [this.$validate.required, this.$validate.min(2)]
+    this.inputs.name.rules = [
+      this.$validate.required,
+      this.$validate.min(2),
+      this.$validate.name
+    ]
     this.inputs.password.rules = [
       this.$validate.required,
       this.$validate.min(3)
@@ -86,15 +99,31 @@ export default {
   },
   methods: {
     submitRegister() {
-      Object.values(this.inputs).map((input) => (input.value = ''))
-      this.alert = {
-        result: 'error',
-        text: 'Произошла неизвестная ошибка'
-      }
+      this.registering = true
       setTimeout(() => {
-        this.alert = { result: '', text: '' }
-      }, 2000)
+        this.alert = {
+          result: 'error',
+          text: 'Произошла неизвестная ошибка'
+        }
+        this.registering = false
+        setTimeout(() => {
+          this.alert = { result: '', text: '' }
+        }, 2000)
+      }, 700)
     }
   }
 }
 </script>
+
+<style>
+.Register-Link {
+  cursor: default;
+  will-change: opacity;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+
+.Register-Link:hover {
+  opacity: 0.8;
+}
+</style>

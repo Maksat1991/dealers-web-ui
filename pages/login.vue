@@ -18,23 +18,22 @@
       />
       <div>
         <v-checkbox v-model="remember" label="Запомнить" />
-        <v-btn
-          to="/register"
-          class="q-mr-sm"
-          color="primary"
-          :loading="redirecting"
-          @click="redirecting = true"
-        >
-          Регистрация
-        </v-btn>
-        <v-btn
-          :loading="authenticating"
-          :disabled="!valid"
-          type="submit"
-          color="primary"
-        >
-          Вход
-        </v-btn>
+        <div class="d-flex flex-column">
+          <v-btn
+            :loading="authenticating"
+            :disabled="!valid"
+            type="submit"
+            color="primary"
+          >
+            Вход
+          </v-btn>
+          <span class="text-center Login-Link d-flex flex-column mt-3">
+            Ещё нет аккаунта?
+            <nuxt-link to="/register" color="primary">
+              Зарегистрироваться
+            </nuxt-link>
+          </span>
+        </div>
       </div>
     </v-form>
     <alert :alert="alert" />
@@ -83,3 +82,16 @@ export default {
   }
 }
 </script>
+
+<style>
+.Login-Link {
+  cursor: default;
+  will-change: opacity;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+
+.Login-Link:hover {
+  opacity: 0.8;
+}
+</style>
