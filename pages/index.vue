@@ -7,7 +7,7 @@ export default {
     const remember = !!JSON.parse(localStorage.getItem('remember'))
     if (!isAuth || !remember) return this.$router.push({ name: 'login' })
     this.$store
-      .dispatch('auth/submitHandler', [
+      .dispatch('auth/login', [
         localStorage.getItem('username'),
         localStorage.getItem('password')
       ])

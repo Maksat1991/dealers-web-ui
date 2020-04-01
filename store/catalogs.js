@@ -22,7 +22,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchCatalogs(state) {
+  async fetchCatalogs({ commit }) {
     // update catalogs
     const token = localStorage.getItem('token')
     const headers = new Headers()
@@ -33,6 +33,6 @@ export const actions = {
       headers
     })
       .then((response) => response.text())
-      .then((catalogs) => state.commit('updateCatalogs', JSON.parse(catalogs)))
+      .then((catalogs) => commit('updateCatalogs', JSON.parse(catalogs)))
   }
 }
