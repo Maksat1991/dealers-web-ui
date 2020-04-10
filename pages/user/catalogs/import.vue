@@ -1,50 +1,58 @@
 <template>
   <div class="d-flex flex-column" style="height: 100%">
-    <v-form class="d-flex align-center" @submit.prevent="sendFile">
-      <v-file-input
-        v-model="file.visible"
-        label="Выбрать файл"
-        accept=".xls, .xlsx"
-        class="mx-5"
-      />
-      <v-btn class="mx-5" type="submit" :loading="sendingFile || sendingResult">
-        Загрузить
-      </v-btn>
-    </v-form>
+    <div
+      v-if="!fetchingCatalogs"
+      class="d-flex align-center justify-space-between"
+    >
+      <v-form
+        class="d-flex align-center flex-grow-1 mx-4"
+        @submit.prevent="sendFile"
+      >
+        <v-file-input
+          v-model="file.visible"
+          label="Выбрать файл"
+          accept=".xls, .xlsx"
+          class="mx-3"
+        />
+        <v-btn
+          type="submit"
+          class="mx-3"
+          :disabled="!file.visible"
+          :loading="sendingFile"
+        >
+          Загрузить
+        </v-btn>
+      </v-form>
+      <v-form
+        class="d-flex align-center flex-grow-1 mx-4"
+        @submit.prevent="sendResults"
+      >
+        <v-select
+          v-model="selectedCatalogName"
+          label="Каталог"
+          class="mx-3"
+          :items="catalogNames"
+          :rules="[$validate.required]"
+        />
+        <v-btn
+          class="mx-3"
+          :disabled="!valid"
+          type="submit"
+          :loading="sendingResult"
+        >
+          Импортировать
+        </v-btn>
+      </v-form>
+    </div>
+    <div v-else class="row d-flex justify-center align-center text-center">
+      <v-progress-circular indeterminate></v-progress-circular>
+    </div>
     <template v-if="getTable.length && !sendingResult" class="row">
       <v-form
         v-model="valid"
         class="d-flex align-center"
         @submit.prevent="sendResults"
       >
-        <v-text-field
-          v-for="(input, index) of inputs"
-          :key="index"
-          v-model.number="input.value"
-          :placeholder="input.hint"
-          type="number"
-          :hint="input.hint"
-          class="mx-5"
-          autocomplete="off"
-          :rules="[
-            (num) => (1 <= num && num <= input.max) || 'Вне значений таблицы'
-          ]"
-        />
-        <v-select
-          v-model="selectedCatalogName"
-          class="mx-5"
-          label="Каталог"
-          :items="catalogNames"
-          :rules="[$validate.required]"
-        />
-        <v-btn
-          :disabled="!valid"
-          class="mx-5"
-          type="submit"
-          :loading="sendingResult"
-        >
-          Отправить
-        </v-btn>
       </v-form>
       <hot-table ref="table" :settings="settingsForTable"></hot-table>
     </template>
@@ -62,45 +70,57 @@ export default {
   data: () => ({
     valid: false,
     file: {
-      visible: new File([], '', undefined),
+      visible: null,
       copy: new File([], '', undefined)
     },
     sendingFile: false,
     sendingResult: false,
-    inputs: {
-      vendorCodeColumn: {
-        hint: 'Артикул',
-        value: null,
-        max: 'columns.length'
-      },
-      nameColumn: {
-        hint: 'Наименование',
-        value: null,
-        max: 'columns.length'
-      },
-      countColumn: {
-        hint: 'Количество',
-        value: null,
-        max: 'columns.length'
-      },
-      priceColumn: {
-        hint: 'Цена',
-        value: null,
-        max: 'columns.length'
-      }
-    }
+    columns: {
+      vendorCode: null,
+      name: null,
+      count: null,
+      price: null
+    },
+    alert: { result: '', text: '' },
+    fetchingCatalogs: true
   }),
   computed: {
     hot() {
       return new Handsontable(this.$refs.table.$el, this.settingsForTable)
     },
     settingsForTable() {
+      const { columns } = this
       return {
-        data: this.getTable,
+        data: JSON.parse(JSON.stringify(this.getTable)),
         licenseKey: 'non-commercial-and-evaluation',
         rowHeaders: true,
-        colHeaders(header) {
-          return header + 1
+        colHeaders(headerIndex) {
+          const header = document.createElement('select')
+          header.setAttribute('onchange', 'headerChangeHandler(event)')
+          header.classList.add(headerIndex + 1)
+          header.classList.add('colHeader-Select')
+          const defaultValue = document.createElement('option')
+          defaultValue.textContent = 'Назначить'
+          const vendorCode = document.createElement('option')
+          vendorCode.setAttribute('id', 'vendorCode')
+          vendorCode.textContent = 'Артикул'
+          const name = document.createElement('option')
+          name.setAttribute('id', 'name')
+          name.textContent = 'Наименование'
+          const count = document.createElement('option')
+          count.setAttribute('id', 'count')
+          count.textContent = 'Количество'
+          const price = document.createElement('option')
+          price.setAttribute('id', 'price')
+          price.textContent = 'Цена'
+          const options = [defaultValue, vendorCode, name, count, price] // keep order
+          Object.values(columns).forEach((value, index) => {
+            if (headerIndex === value - 1) {
+              options[index + 1].setAttribute('selected', 'selected')
+            }
+          })
+          options.forEach((option) => header.appendChild(option))
+          return header.outerHTML
         },
         stretchH: 'all',
         height: '100%',
@@ -136,26 +156,44 @@ export default {
         return this.selectedCatalog.name
       },
       set(selectedCatalogName) {
-        const selectedCatalog = JSON.parse(
-          JSON.stringify(this.selectedCatalog.name)
-        )
-        this.selectedCatalog = selectedCatalog.selectedCatalogName
+        const selectedCatalog = JSON.parse(JSON.stringify(this.selectedCatalog))
+        selectedCatalog.name = selectedCatalogName
+        this.selectedCatalog = selectedCatalog
       }
     }
   },
-  mounted() {
-    // keep restriction on inputs if user leaves page and returns here (fix)
+  async mounted() {
+    await this.$store.dispatch('catalogs/fetchCatalogs')
+    this.fetchingCatalogs = false
+    // keep table
     if (this.getTable.length) this.updateTable(this.getTable)
-    this.fetchCatalogs()
+    window.headerChangeHandler = ({ target }) => {
+      const optionText = target.options[target.selectedIndex].textContent
+      // get column index from classList
+      const columnIndex = +target.classList
+        .toString()
+        .split(' ')
+        .filter((classItem) => +classItem)[0]
+      switch (optionText) {
+        case 'Артикул':
+          this.columns.vendorCode = columnIndex
+          break
+        case 'Наименование':
+          this.columns.name = columnIndex
+          break
+        case 'Количество':
+          this.columns.count = columnIndex
+          break
+        case 'Цена':
+          this.columns.price = columnIndex
+          break
+      }
+    }
   },
   methods: {
     ...mapActions('catalogs', ['fetchCatalogs']),
     updateTable(table) {
       this.$store.commit('table/updateTable', table)
-      Object.values(this.inputs).forEach((input) => {
-        // set restriction for user so he can't put value more than it is possible
-        if (input.max === 'columns.length') input.max = table[0].length
-      })
     },
     async sendFile() {
       if (!this.file.visible) return
@@ -196,18 +234,22 @@ export default {
     async sendResults() {
       this.sendingResult = true
 
-      const vendorCodeColumn = this.inputs.vendorCodeColumn.value
-      const nameColumn = this.inputs.nameColumn.value
-      const countColumn = this.inputs.countColumn.value
-      const priceColumn = this.inputs.priceColumn.value
-      const inputs = [vendorCodeColumn, nameColumn, countColumn, priceColumn]
+      const vendorCodeColumn = this.columns.vendorCode
+      const nameColumn = this.columns.name
+      const countColumn = this.columns.count
+      const priceColumn = this.columns.price
       // if column indexes have duplicates, throw error
       if (new Set(inputs).size !== inputs.length) {
-        await this.$store.dispatch('alert/updateAlert', {
-          result: 'error',
-          text: 'Индексы колонок не должны совпадать'
-        })
-        return (this.this.sendingResult = false)
+        setTimeout(() => {
+          this.alert = { result: '', text: '' }
+        }, 2000)
+        return ([this.alert, this.sendingResult] = [
+          {
+            result: 'error',
+            text: 'Индексы колонок не должны совпадать'
+          },
+          false
+        ])
       }
       const token = localStorage.getItem('token')
       const headers = new Headers()
@@ -247,8 +289,8 @@ export default {
       })
       if (res.ok) {
         this.updateTable([])
-        Object.values(this.inputs).forEach((input) => {
-          input.value = null
+        Object.keys(this.columns).forEach((columnKey) => {
+          this.columns[columnKey] = null
         })
         this.file.copy = null
         this.sendingResult = false
@@ -264,6 +306,9 @@ export default {
             'Попробуйте изменить данные (колонки цен и кол-ва должны содержать только числа)'
         })
       }
+      setTimeout(() => {
+        this.alert = { result: '', text: '' }
+      }, 2000)
     }
   }
 }
@@ -287,5 +332,8 @@ export default {
 }
 .colHeader-Select::-ms-expand {
   display: none; /* Remove default arrow in Internet Explorer 10 and 11 */
+}
+.handsontable .wtBorder.current {
+  z-index: 0;
 }
 </style>
