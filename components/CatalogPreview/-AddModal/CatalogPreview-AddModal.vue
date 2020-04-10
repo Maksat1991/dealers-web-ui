@@ -48,7 +48,7 @@ export default {
       const headers = new Headers()
       headers.append('Authorization', `Bearer ${token}`)
       headers.append('content-type', 'application/json')
-      const res = await fetch('http://185.146.3.147:8082/api/category', {
+      const res = await fetch(`${process.env.API}category`, {
         headers,
         method: 'POST',
         body: JSON.stringify({

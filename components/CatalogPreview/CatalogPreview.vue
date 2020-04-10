@@ -181,7 +181,7 @@ export default {
       const headers = new Headers()
       headers.append('Authorization', `Bearer ${token}`)
 
-      await fetch(`http://185.146.3.147:8082/api/catalog/${this.catalog.id}`, {
+      await fetch(`${process.env.API}catalog/${this.catalog.id}`, {
         method: 'GET',
         headers
       })
@@ -209,7 +209,7 @@ export default {
       const headers = new Headers()
       headers.append('Authorization', `Bearer ${token}`)
 
-      const res = await fetch(`http://185.146.3.147:8082/api/category/${id}`, {
+      const res = await fetch(`${process.env.API}category/${id}`, {
         method: 'DELETE',
         headers
       })

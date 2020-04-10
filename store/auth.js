@@ -21,7 +21,7 @@ export const actions = {
     body.append('username', username)
     body.append('password', password)
     let succeed
-    await fetch('http://185.146.3.147:8082/oauth/token', {
+    await fetch(`${process.env.API}oauth/token`, {
       headers: {
         authorization: `Basic ${process.env.AUTH_TOKEN}`
       },

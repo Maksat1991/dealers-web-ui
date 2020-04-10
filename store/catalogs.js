@@ -46,7 +46,7 @@ export const actions = {
     const headers = new Headers()
     headers.append('Authorization', `Bearer ${token}`)
 
-    await fetch('http://185.146.3.147:8082/api/catalog', {
+    await fetch(`${process.env.API}catalog`, {
       method: 'GET',
       headers
     })

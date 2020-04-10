@@ -206,7 +206,7 @@ export default {
       const body = new FormData()
       body.append('file', file, file.name)
 
-      await fetch('http://185.146.3.147:8082/api/catalog/import/preview', {
+      await fetch(`${process.env.API}catalog/import/preview`, {
         method: 'POST',
         headers,
         body,
@@ -239,7 +239,10 @@ export default {
       const countColumn = this.columns.count
       const priceColumn = this.columns.price
       // if column indexes have duplicates, throw error
-      if (new Set(inputs).size !== inputs.length) {
+      if (
+        new Set(Object.values(this.columns)).size !==
+        Object.values(this.inputs).length
+      ) {
         setTimeout(() => {
           this.alert = { result: '', text: '' }
         }, 2000)
@@ -281,7 +284,7 @@ export default {
         catalog_id: this.selectedCatalog.id,
         items: table
       }
-      const res = await fetch('http://185.146.3.147:8082/api/catalog/import', {
+      const res = await fetch(`${process.env.API}catalog/import`, {
         method: 'POST',
         headers,
         body: JSON.stringify(body),
