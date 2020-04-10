@@ -17,16 +17,22 @@
         <nuxt />
       </v-container>
     </v-content>
+    <alert :alert="alert" />
   </v-app>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import Alert from '../components/Alert/Alert'
+
 export default {
+  components: { Alert },
   data: () => ({
     nav: [
       { text: 'Регистрация', to: '/register' },
       { text: 'Вход', to: '/login' }
     ]
-  })
+  }),
+  computed: mapGetters('alert', ['alert'])
 }
 </script>

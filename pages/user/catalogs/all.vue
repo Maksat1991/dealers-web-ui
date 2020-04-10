@@ -1,14 +1,24 @@
 <template>
-  <v-list>
-    <catalog v-for="catalog of catalogs" :key="catalog.id" :catalog="catalog" />
-  </v-list>
+  <div>
+    <v-navigation-drawer style="width: 356px" absolute clipped permanent>
+      <catalog-preview
+        v-for="catalog of catalogs"
+        :key="catalog.id"
+        :catalog="catalog"
+      />
+    </v-navigation-drawer>
+    <div style="margin-left: 380px" class="d-flex">
+      <catalog />
+    </div>
+  </div>
 </template>
 
 <script>
+import CatalogPreview from '../../../components/CatalogPreview/CatalogPreview'
 import Catalog from '../../../components/Catalog/Catalog'
 
 export default {
-  components: { Catalog },
+  components: { CatalogPreview, Catalog },
   computed: {
     catalogs() {
       return this.$store.getters['catalogs/getCatalogs']

@@ -9,14 +9,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Alert',
-  props: {
-    alert: {
-      type: Object,
-      required: true
-    }
-  }
+  computed: mapGetters('alert', ['alert'])
 }
 </script>
 

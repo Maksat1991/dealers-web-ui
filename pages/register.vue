@@ -41,15 +41,12 @@
         </span>
       </div>
     </v-form>
-    <alert :alert="alert" />
   </div>
 </template>
 
 <script>
-import Alert from '../components/Alert/Alert'
 export default {
   name: 'Register',
-  components: { Alert },
   data: () => ({
     inputs: {
       email: {
@@ -77,7 +74,6 @@ export default {
         rules: []
       }
     },
-    alert: { result: '', text: '' },
     showPassword: false,
     valid: false,
     registering: false
@@ -101,14 +97,11 @@ export default {
     submitRegister() {
       this.registering = true
       setTimeout(() => {
-        this.alert = {
+        this.$store.dispatch('alert/updateAlert', {
           result: 'error',
           text: 'Произошла неизвестная ошибка'
-        }
+        })
         this.registering = false
-        setTimeout(() => {
-          this.alert = { result: '', text: '' }
-        }, 2000)
       }, 700)
     }
   }

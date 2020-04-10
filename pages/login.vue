@@ -36,21 +36,17 @@
         </div>
       </div>
     </v-form>
-    <alert :alert="alert" />
   </div>
 </template>
 
 <script>
-import Alert from '../components/Alert/Alert'
 export default {
   name: 'Login',
-  components: { Alert },
   data: () => ({
     username: '',
     password: '',
     showPassword: false,
     remember: false,
-    alert: { result: '', text: '' },
     valid: false,
     authenticating: false,
     redirecting: false
@@ -65,17 +61,14 @@ export default {
           if (succeed) {
             this.$router.push({ name: 'user' })
           } else {
-            this.alert = {
+            this.$store.dispatch('alert/updateAlert', {
               result: 'error',
               text: 'Произошла ошибка, неправильный логин и/или пароль'
-            }
+            })
             this.username = ''
             this.password = ''
             this.remember = false
           }
-          setTimeout(() => {
-            this.alert = { result: '', text: '' }
-          }, 2000)
         })
       this.authenticating = false
     }

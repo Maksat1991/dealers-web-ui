@@ -48,7 +48,6 @@
       </v-form>
       <hot-table ref="table" :settings="settingsForTable"></hot-table>
     </template>
-    <alert :alert="alert" />
   </div>
 </template>
 
@@ -56,11 +55,10 @@
 import { HotTable } from '@handsontable/vue'
 import { mapGetters, mapActions } from 'vuex'
 import Handsontable from 'handsontable'
-import Alert from '../../../components/Alert/Alert'
 
 export default {
   name: 'ImportVue',
-  components: { HotTable, Alert },
+  components: { HotTable },
   data: () => ({
     valid: false,
     file: {
@@ -90,8 +88,7 @@ export default {
         value: null,
         max: 'columns.length'
       }
-    },
-    alert: { result: '', text: '' }
+    }
   }),
   computed: {
     hot() {
@@ -206,16 +203,11 @@ export default {
       const inputs = [vendorCodeColumn, nameColumn, countColumn, priceColumn]
       // if column indexes have duplicates, throw error
       if (new Set(inputs).size !== inputs.length) {
-        setTimeout(() => {
-          this.alert = { result: '', text: '' }
-        }, 2000)
-        return ([this.alert, this.sendingResult] = [
-          {
-            result: 'error',
-            text: 'Индексы колонок не должны совпадать'
-          },
-          false
-        ])
+        await this.$store.dispatch('alert/updateAlert', {
+          result: 'error',
+          text: 'Индексы колонок не должны совпадать'
+        })
+        return (this.this.sendingResult = false)
       }
       const token = localStorage.getItem('token')
       const headers = new Headers()
@@ -260,21 +252,18 @@ export default {
         })
         this.file.copy = null
         this.sendingResult = false
-        this.alert = {
+        await this.$store.dispatch('alert/updateAlert', {
           result: 'success',
           text: 'Успешно импортировано'
-        }
+        })
       } else {
         this.sendingResult = false
-        this.alert = {
+        await this.$store.dispatch('alert/updateAlert', {
           result: 'error',
           text:
             'Попробуйте изменить данные (колонки цен и кол-ва должны содержать только числа)'
-        }
+        })
       }
-      setTimeout(() => {
-        this.alert = { result: '', text: '' }
-      }, 2000)
     }
   }
 }

@@ -1,6 +1,7 @@
 export const state = () => ({
   catalogs: [],
-  selectedCatalog: null
+  selectedCatalog: null,
+  categoryToView: null
 })
 
 export const getters = {
@@ -9,6 +10,9 @@ export const getters = {
   },
   getSelectedCatalog(state) {
     return state.selectedCatalog || state.catalogs[0]
+  },
+  categoryToView(state) {
+    return state.categoryToView
   }
 }
 
@@ -18,6 +22,20 @@ export const mutations = {
   },
   updateCatalogs(state, catalogs) {
     state.catalogs = catalogs
+  },
+  updateCategoryToView(state, category) {
+    state.categoryToView = category
+  },
+  addItemToCategoryToView(state, item) {
+    state.categoryToView.items.push(item)
+  },
+  replaceItemToCategoryToView(state, newItem) {
+    state.categoryToView.items.forEach((item, itemIndex, category) => {
+      if (item.id === newItem.id) category[itemIndex] = newItem
+    })
+    // trigger catalog table update
+    state.categoryToView.items.push('')
+    state.categoryToView.items.pop()
   }
 }
 

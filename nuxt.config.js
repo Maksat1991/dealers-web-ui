@@ -38,7 +38,7 @@ export default {
       light: true,
       themes: {
         light: {
-          primary: colors.purple,
+          primary: '#1a73e8',
           secondary: colors.grey.darken1,
           accent: colors.shades.black,
           error: colors.red.accent3

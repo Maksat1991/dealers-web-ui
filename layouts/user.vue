@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar app clipped-right color="blue-grey" dark>
+    <v-app-bar dark app color="#5f6368" clipped-right>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Личный Кабинет</v-toolbar-title>
       <v-spacer />
@@ -85,11 +85,16 @@
         <nuxt />
       </v-container>
     </v-content>
+    <alert :alert="alert" />
   </v-app>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import Alert from '../components/Alert/Alert'
+
 export default {
+  components: { Alert },
   data: () => ({
     drawer: false,
     left: false,
@@ -141,7 +146,8 @@ export default {
           action: this.logout
         }
       ]
-    }
+    },
+    ...mapGetters('alert', ['alert'])
   },
   watch: {
     miniVariant(miniVariant) {
