@@ -33,7 +33,7 @@
             label="Единица измерения товара"
           />
           <v-text-field
-            v-model.number="form.price"
+            v-model.number="form.base_price"
             type="number"
             label="Стоимость"
             :rules="[
@@ -73,7 +73,7 @@ export default {
       is_visible: false,
       measure: null,
       order_measure: null,
-      price: 0
+      base_price: 0
     },
     measureItems: ['Кг', 'Шт', 'Литр']
   }),

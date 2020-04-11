@@ -241,7 +241,7 @@ export default {
       // if column indexes have duplicates, throw error
       if (
         new Set(Object.values(this.columns)).size !==
-        Object.values(this.inputs).length
+        Object.values(this.columns).length
       ) {
         setTimeout(() => {
           this.alert = { result: '', text: '' }
