@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-navigation-drawer style="width: 356px" absolute clipped permanent>
+    <v-navigation-drawer style="width: 240px" absolute clipped permanent>
       <catalog-preview
         v-for="catalog of catalogs"
         :key="catalog.id"
         :catalog="catalog"
       />
     </v-navigation-drawer>
-    <div style="margin-left: 380px" class="d-flex">
+    <div style="margin-left: 260px" class="d-flex">
       <catalog />
     </div>
   </div>

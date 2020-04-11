@@ -251,6 +251,6 @@ export default {
 
 <style>
 .v-treeview-node__level {
-  width: 10px;
+  width: 5px;
 }
 </style>

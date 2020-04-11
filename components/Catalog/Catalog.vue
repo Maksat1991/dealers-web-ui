@@ -51,9 +51,11 @@ export default {
       return this.$store.state.catalogs.categoryToView
     },
     settingsForTable() {
+      let columnsAmount = 0
       let categoryIndex = 0
       const colHeaders = Object.keys(this.categoryToView.items[0]).map(
         (value, index) => {
+          columnsAmount += 1
           switch (value) {
             case 'id':
               return 'ID'
@@ -120,8 +122,7 @@ export default {
         },
         manualColumnResize: true,
         manualRowResize: true,
-        selectionMode: 'single',
-        disableVisualSelection: true,
+        colWidths: `${100 / columnsAmount}%`,
         height: '100%',
         columnSorting: true
       }

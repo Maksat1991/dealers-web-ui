@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="modal.show">
-    <v-card>
+    <v-card class="pa-5">
       <v-form v-model="valid" @submit.prevent="addItem">
         <v-card-title>Добавить товар</v-card-title>
         <v-card-text>
@@ -42,8 +42,15 @@
           />
         </v-card-text>
         <v-card-actions>
+          <v-btn
+            class="ma-3"
+            type="submit"
+            rounded
+            style="background-color: transparent"
+          >
+            <span style="color: #1a73e8">Добавить</span>
+          </v-btn>
           <v-spacer />
-          <v-btn type="submit">Добавить</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>

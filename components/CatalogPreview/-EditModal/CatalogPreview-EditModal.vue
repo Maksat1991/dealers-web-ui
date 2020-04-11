@@ -24,10 +24,15 @@
           />
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn type="submit" text>
-            Сохранить
+          <v-btn
+            class="ma-3"
+            type="submit"
+            rounded
+            style="background-color: transparent"
+          >
+            <span style="color: #1a73e8">Сохранить</span>
           </v-btn>
+          <v-spacer></v-spacer>
         </v-card-actions>
       </v-form>
     </v-card>
