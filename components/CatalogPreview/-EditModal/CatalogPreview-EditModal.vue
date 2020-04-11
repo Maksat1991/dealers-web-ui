@@ -81,7 +81,7 @@ export default {
       headers.append('Authorization', `Bearer ${token}`)
       headers.append('content-type', 'application/json')
 
-      const res = await fetch(`${process.env.API}category`, {
+      const res = await fetch(`${process.env.API}/api/category`, {
         headers,
         body: JSON.stringify({
           category_id,

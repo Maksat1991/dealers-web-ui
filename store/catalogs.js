@@ -46,7 +46,7 @@ export const actions = {
     const headers = new Headers()
     headers.append('Authorization', `Bearer ${token}`)
 
-    await fetch(`${process.env.API}catalog`, {
+    await fetch(`${process.env.API}api/catalog`, {
       method: 'GET',
       headers
     })

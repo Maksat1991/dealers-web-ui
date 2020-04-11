@@ -206,7 +206,7 @@ export default {
       const body = new FormData()
       body.append('file', file, file.name)
 
-      await fetch(`${process.env.API}catalog/import/preview`, {
+      await fetch(`${process.env.API}api/catalog/import/preview`, {
         method: 'POST',
         headers,
         body,
@@ -284,7 +284,7 @@ export default {
         catalog_id: this.selectedCatalog.id,
         items: table
       }
-      const res = await fetch(`${process.env.API}catalog/import`, {
+      const res = await fetch(`${process.env.API}api/catalog/import`, {
         method: 'POST',
         headers,
         body: JSON.stringify(body),

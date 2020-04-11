@@ -100,7 +100,7 @@ export default {
       this.form.measure = this.translate(this.form.measure)
       this.form.order_measure = this.translate(this.form.order_measure)
 
-      const res = await fetch('http://185.146.3.147:8082/api/item', {
+      const res = await fetch(`${process.env.API}api/item`, {
         method: 'PUT',
         headers,
         body: JSON.stringify(this.form)
