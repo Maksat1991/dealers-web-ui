@@ -3,6 +3,14 @@
     <v-app-bar dark app color="#5f6368" clipped-right>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Личный Кабинет</v-toolbar-title>
+      <v-text-field
+        class="mx-8"
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        single-line
+        label="Поиск"
+        style="max-width: 280px"
+      ></v-text-field>
       <v-spacer />
       <v-menu bottom left>
         <template v-slot:activator="{ on }">

@@ -51,11 +51,9 @@ export default {
       return this.$store.state.catalogs.categoryToView
     },
     settingsForTable() {
-      let columnsAmount = 0
       let categoryIndex = 0
       const colHeaders = Object.keys(this.categoryToView.items[0]).map(
         (value, index) => {
-          columnsAmount += 1
           switch (value) {
             case 'id':
               return 'ID'
@@ -64,7 +62,7 @@ export default {
             case 'price':
               return 'Стоимость'
             case 'measure':
-              return 'Единица измерения'
+              return 'Ед. измерения'
             case 'articul':
               return 'Артикул'
             case 'category_id':
@@ -75,7 +73,7 @@ export default {
             case 'base_price':
               return 'Базовая стоимость'
             case 'order_measure':
-              return 'Единица измерения товара'
+              return 'Ед. измерения товара'
             default:
               return value
           }
@@ -106,6 +104,7 @@ export default {
       return {
         data,
         editor: false,
+        disableVisualSelection: true,
         licenseKey: 'non-commercial-and-evaluation',
         colHeaders,
         stretchH: 'all',
@@ -122,7 +121,17 @@ export default {
         },
         manualColumnResize: true,
         manualRowResize: true,
-        colWidths: `${100 / columnsAmount}%`,
+        colWidths: [
+          '5%',
+          '30%',
+          '10%',
+          '10%',
+          '10%',
+          '10%',
+          '5%',
+          '10%',
+          '10%'
+        ],
         height: '100%',
         columnSorting: true
       }
