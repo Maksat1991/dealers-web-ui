@@ -1,6 +1,14 @@
 <template>
   <v-dialog v-model="modal.show">
     <v-card class="pa-5">
+      <v-btn
+        style="position: absolute; right: 20px"
+        class="mx-auto"
+        icon
+        @click="modal.show = false"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
       <v-form v-model="valid" @submit.prevent="editItem">
         <v-card-title>Изменить товар</v-card-title>
         <v-card-text>
@@ -44,6 +52,9 @@
         <v-card-actions>
           <v-btn class="ma-3 px-6 primary" type="submit" rounded>
             <span>Сохранить</span>
+          </v-btn>
+          <v-btn class="ma-3 px-6 primary" rounded @click="modal.show = false">
+            <span>Отменить</span>
           </v-btn>
           <v-spacer />
         </v-card-actions>

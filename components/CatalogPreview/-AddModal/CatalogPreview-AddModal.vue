@@ -1,6 +1,14 @@
 <template>
   <v-dialog v-model="modal.show" width="500">
     <v-card class="pa-5">
+      <v-btn
+        style="position: absolute; right: 20px"
+        class="mx-auto"
+        icon
+        @click="modal.show = false"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
       <v-form v-model="modal.form" @submit.prevent="addCategory">
         <v-card-title>Добавить категорию</v-card-title>
         <v-card-text>
@@ -17,6 +25,9 @@
         <v-card-actions>
           <v-btn class="ma-3 px-6 primary" type="submit" rounded>
             <span>Добавить</span>
+          </v-btn>
+          <v-btn class="ma-3 px-6 primary" rounded @click="modal.show = false">
+            <span>Отменить</span>
           </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
