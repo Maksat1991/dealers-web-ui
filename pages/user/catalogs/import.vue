@@ -24,6 +24,7 @@
         </v-btn>
       </v-form>
       <v-form
+        v-model="valid"
         class="d-flex align-center flex-grow-1 mx-4"
         @submit.prevent="sendResults"
       >
@@ -35,8 +36,8 @@
           :rules="[$validate.required]"
         />
         <v-btn
+          :disabled="!valid || !getTable.length"
           class="mx-3"
-          :disabled="!valid"
           type="submit"
           :loading="sendingResult"
         >
@@ -48,12 +49,6 @@
       <v-progress-circular indeterminate></v-progress-circular>
     </div>
     <template v-if="getTable.length && !sendingResult" class="row">
-      <v-form
-        v-model="valid"
-        class="d-flex align-center"
-        @submit.prevent="sendResults"
-      >
-      </v-form>
       <hot-table ref="table" :settings="settingsForTable"></hot-table>
     </template>
   </div>
@@ -243,17 +238,13 @@ export default {
         new Set(Object.values(this.columns)).size !==
         Object.values(this.columns).length
       ) {
-        setTimeout(() => {
-          this.alert = { result: '', text: '' }
-        }, 2000)
-        return ([this.alert, this.sendingResult] = [
-          {
-            result: 'error',
-            text: 'Индексы колонок не должны совпадать'
-          },
-          false
-        ])
+        this.$store.dispatch('alert/updateAlert', {
+          result: 'error',
+          text: 'Проверьте правильность назначенных типов колонок'
+        })
+        return (this.sendingResult = false)
       }
+      console.log(1)
       const token = localStorage.getItem('token')
       const headers = new Headers()
       headers.append('Authorization', `Bearer ${token}`)
