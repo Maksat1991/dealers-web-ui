@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@handsontable/vue": "^4.1.1",
-    "handsontable": "^7.4.2",
+    "handsontable": "^10.0.0",
     "nuxt": "^2.0.0",
     "vuetify": "^2.2.20"
   },
